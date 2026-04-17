@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
 public class Main {
+    private static final int HISTOGRAM_BOTTOM_PADDING = 20;
+
     public static void main(String[] args) {
         String inputPath = args.length > 0 ? args[0] : "lena512.bmp";
         File inputFile = new File(inputPath);
@@ -83,16 +85,19 @@ public class Main {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, width, height);
 
-        int max = 1;
+        int max = 0;
         for (int value : histogram) {
             if (value > max) {
                 max = value;
             }
         }
+        if (max == 0) {
+            max = 1;
+        }
 
         g.setColor(Color.BLACK);
         for (int i = 0; i < 256; i++) {
-            int barHeight = (int) Math.round((histogram[i] / (double) max) * (height - 20));
+            int barHeight = (int) Math.round((histogram[i] / (double) max) * (height - HISTOGRAM_BOTTOM_PADDING));
             int x = i * width / 256;
             int nextX = (i + 1) * width / 256;
             int barWidth = Math.max(1, nextX - x);
